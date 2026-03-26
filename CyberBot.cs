@@ -79,7 +79,7 @@ namespace CyberBot_part1
             TypeEffect($"\nWelcome, {userName}! I'm here to help you stay safe online.\n");
 
         }
-        
+
         //===================
         // MAIN CHAT LOOP
         //===================
@@ -109,7 +109,49 @@ namespace CyberBot_part1
 
                 HandleResponse(input);
             }
+        }
+
+            //====================
+            //RESPONSE HANDLER
+            //====================
+
+            private void HandleResponse(string input)
+        {
+            //if the user's reponse contains whatever is in the brackets it eill respond with programmed asnwers
+            if (input.Contains("How are you"))
+            {
+                TypeEffect("I am doing okay, thank you for asking ");
+            }
+            if (input.Contains("pupose"))
+            {
+                TypeEffect("My purpose is to educate you about cybersecurity annd help you stay safe online");
+            }
+            if (input.Contains("What can i ask "))
+            {
+                TypeEffect("You can ask me about passwords, phishing and safe browsing. ");
+
+            }
+            if (input.Contains("passwords"))
+            {
+                TypeEffect("Use strong passwords with letters, numbers, and symbols. Avoid personal info and reuse. ");
+            }
+            if (input.Contains("phishing"))
+            {
+                TypeEffect("Phishing is when attackers trick you into giving personal info using fake emails or websites. ");
+            }
+            
+        
+            if (input.Contains("Safe browsing"))
+            {
+                TypeEffect("Only visit secure sites (https), avoid suspicious links, and keep your browser updated. ");
+           }
+            else
+            {
+                ShowError("I didn't quite understand that. Try asking about passwords, phishing or safe browsing");
+            }
+
+            }
 
         }
     }
-}
+
