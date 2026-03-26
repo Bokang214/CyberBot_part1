@@ -1,6 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
-using System.IO;
+
 using System.Threading;
 
 namespace CyberBot_part1
@@ -63,5 +62,54 @@ namespace CyberBot_part1
         //    }
         //}
 
+
+
+
+        private void AskUserName()
+        {
+            Console.Write("\nEnter your name please: ");
+            userName = Console.ReadLine();
+
+            while (string.IsNullOrWhiteSpace(userName))
+            {
+                Console.Write("Name cannot be empty. Please enter your name: ");
+                userName = Console.ReadLine();
+            }
+
+            TypeEffect($"\nWelcome, {userName}! I'm here to help you stay safe online.\n");
+
+        }
+        
+        //===================
+        // MAIN CHAT LOOP
+        //===================
+
+        private void ChatLoop()
+        {
+            while (true)
+            {
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.Write("\nAsk a questions about Phishing, Safe browsing or Passwords(type exit to leave the chat): ");
+                Console.ResetColor();
+
+                string input = Console.ReadLine().ToLower();
+
+                //input validation
+                if (string.IsNullOrWhiteSpace(input))
+                {
+                    ShowError("I didn't quite understand that. Could you rephrase?");
+                    continue;
+
+                }
+                if (input == "exit")
+                {
+                    TypeEffect($"Goodbye {userName}, stay safe online and think before you click! see ya!");
+                    break;
+                }
+
+                HandleResponse(input);
+            }
+
+        }
     }
 }
