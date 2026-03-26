@@ -161,6 +161,16 @@ namespace CyberBot_part1
             Console.ResetColor();
         }
 
+        private void TypeEffect(string message)
+        {
+            foreach (char f in message)
+            {
+                Console.Write(f);
+                Thread.Sleep(20);
+
+            }
+            Console.WriteLine();
         }
+    }
     }
 
