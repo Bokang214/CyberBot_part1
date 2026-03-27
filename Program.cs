@@ -6,8 +6,8 @@ namespace CyberBot_part1
     {
         static void Main(string[] args)
         {
-            CyberBot b = new CyberBot();
-            b.Start();
+            CyberBot bot= new CyberBot();
+            bot.Start();
         }
     }
 }

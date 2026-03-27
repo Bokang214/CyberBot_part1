@@ -1,176 +1,184 @@
 ﻿using System;
-
 using System.Threading;
+using System.Diagnostics;
+using System.IO;
 
 namespace CyberBot_part1
 {
     public class CyberBot
     {
-        private string userName = "";
+        private string userName;
+
         public void Start()
         {
-            Console.Title = "CyberSecurity Awareness Bot";
+            Console.Title = "Cybersecurity Awareness Bot";
 
             ShowHeader();
-            //PlayVoiceGreeting();
-            AskUserName();
-            ChatLoop();
+            PlayVoiceGreeting();
+            GetUserName();
+            WelcomeUser();
+            MenuLoop();
         }
 
-        //=====================
-        //HEADER + ASCII ART
-        //=====================
+        // =========================
+        // HEADER
+        // =========================
         private void ShowHeader()
         {
             Console.ForegroundColor = ConsoleColor.Cyan;
 
-            Console.WriteLine("======================================================");
-            Console.WriteLine("============CYBERSECURITY AWARENESS BOT===============");
-            Console.WriteLine("======================================================");
-            Console.WriteLine(@"
-       ____      _               ____        _   
-      / ___|   _| |__   ___ _ __| __ )  ___ | |_ 
-     | |  | | | | '_ \ / _ \ '__|  _ \ / _ \| __|
-     | |__| |_| | |_) |  __/ |  | |_) | (_) | |_ 
-      \____\__, |_.__/ \___|_|  |____/ \___/ \__|
-           |___/                                 
-               Stay Safe Online!                                                            
+            Console.WriteLine("=================================================");
+            Console.WriteLine("========CYBERSECURITY AWARENESS BOT==============");
+            Console.WriteLine("=================================================");
 
+            Console.WriteLine(@"
+      ____      _               ____        _   
+     / ___|   _| |__   ___ _ __| __ )  ___ | |_ 
+    | |  | | | | '_ \ / _ \ '__|  _ \ / _ \| __|
+    | |__| |_| | |_) |  __/ |  | |_) | (_) | |_ 
+     \____\__, |_.__/ \___|_|  |____/ \___/ \__|
+          |___/                                 
+           Stay Safe Online!
 ");
+
             Console.ResetColor();
         }
 
-        //===================
-        //VOICE GREETING
-        //===================
-
-        //private void PlayVoiceGreeting()
-        //{
-        //    try
-        //    {
-        //        string path = "welcome.wav"; // file in project folder
-        //        SoundPlayer player = new SoundPlayer(path);
-        //        player.Load();        // loads audio
-        //        player.PlaySync();    // plays before continuing
-        //    }
-        //    catch (Exception ex)
-        //    {
-        //        Console.ForegroundColor = ConsoleColor.Yellow;
-        //        Console.WriteLine("🔊 Voice greeting could not play.");
-        //        Console.WriteLine("Error: " + ex.Message);
-        //        Console.ResetColor();
-        //    }
-        //}
-
-
-
-
-        private void AskUserName()
+        // =========================
+        // VOICE GREETING (MP3/WAV)
+        // =========================
+        private void PlayVoiceGreeting()
         {
-            Console.Write("\nEnter your name please: ");
+            try
+            {
+                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "welcome.wav");
+
+                if (File.Exists(path))
+                {
+                    Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+                    Thread.Sleep(3000); // allow it to play briefly
+                }
+                else
+                {
+                    Console.WriteLine("(Audio file not found)");
+                }
+            }
+            catch
+            {
+                Console.WriteLine("(Could not play audio)");
+            }
+        }
+
+        // =========================
+        // GET NAME
+        // =========================
+        private void GetUserName()
+        {
+            Console.Write("\nEnter your name: ");
             userName = Console.ReadLine();
 
             while (string.IsNullOrWhiteSpace(userName))
             {
-                Console.Write("Name cannot be empty. Please enter your name: ");
+                Console.Write("Name cannot be empty. Try again: ");
                 userName = Console.ReadLine();
             }
-
-            TypeEffect($"\nWelcome, {userName}! I'm here to help you stay safe online.\n");
-
         }
 
-        //===================
-        // MAIN CHAT LOOP
-        //===================
+        // =========================
+        // WELCOME
+        // =========================
+        private void WelcomeUser()
+        {
+            TypeEffect($"\nHello, {userName}! Welcome to the Cybersecurity Awareness Bot.");
+            TypeEffect("I'm here to help you stay safe online.\n");
+        }
 
-        private void ChatLoop()
+        // =========================
+        // MENU LOOP
+        // =========================
+        private void MenuLoop()
         {
             while (true)
             {
+                ShowMenu();
+
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.Write("\nAsk a questions about Phishing, Safe browsing or Passwords(type exit to leave the chat): ");
+                Console.Write($"\n{userName}> ");
                 Console.ResetColor();
 
-                string input = Console.ReadLine().ToLower();
+                string choice = Console.ReadLine();
 
-                //input validation
-                if (string.IsNullOrWhiteSpace(input))
+                if (string.IsNullOrWhiteSpace(choice))
                 {
-                    ShowError("I didn't quite understand that. Could you rephrase?");
+                    ShowError("Invalid input. Please select an option.");
                     continue;
-
                 }
-                if (input == "exit")
+
+                switch (choice)
                 {
-                    TypeEffect($"Goodbye {userName}, stay safe online and think before you click! see ya!");
-                    break;
+                    case "1":
+                        TypeEffect("My purpose is to educate you about cybersecurity and help you stay safe online.");
+                        break;
+
+                    case "2":
+                        TypeEffect("Phishing is a scam where attackers trick you into giving personal information through fake emails or websites.");
+                        break;
+
+                    case "3":
+                        TypeEffect("Use strong passwords with letters, numbers, and symbols. Avoid using personal information and never reuse passwords.");
+                        break;
+
+                    case "4":
+                        TypeEffect("Safe browsing means visiting secure websites (https), avoiding suspicious links, and keeping your software updated.");
+                        break;
+
+                    case "5":
+                    case "exit":
+                        TypeEffect($"Goodbye {userName}, stay safe online!");
+                        return;
+
+                    default:
+                        ShowError("Please choose a valid option (1–5).");
+                        break;
                 }
-
-                HandleResponse(input);
             }
         }
 
-        //====================
-        //RESPONSE HANDLER
-        //====================
-
-        private void HandleResponse(string input)
+        // =========================
+        // MENU DISPLAY
+        // =========================
+        private void ShowMenu()
         {
-            //if the user's reponse contains whatever is in the brackets it eill respond with programmed asnwers
-            if (input.Contains("How are you"))
-            {
-                TypeEffect("I am doing okay, thank you for asking ");
-            }
-            else if (input.Contains("purpose"))
-            {
-                TypeEffect("My purpose is to educate you about cybersecurity annd help you stay safe online");
-            }
-            else if (input.Contains("What can i ask "))
-            {
-                TypeEffect("You can ask me about passwords, phishing and safe browsing. ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
 
-            }
-            else if (input.Contains("passwords"))
-            {
-                TypeEffect("Use strong passwords with letters, numbers, and symbols. Avoid personal info and reuse. ");
-            }
-            else if (input.Contains("phishing"))
-            {
-                TypeEffect("Phishing is when attackers trick you into giving personal info using fake emails or websites. ");
-            }
-            else if (input.Contains("safe browsing"))
-            {
-                TypeEffect("Only visit secure sites (https), avoid suspicious links, and keep your browser updated.");
-            }
-            else
-            {
-                ShowError("I didn't quite understand that. Try asking about passwords, phishing or safe browsing");
-            }
+            Console.WriteLine("\n================ MENU ================");
+            Console.ResetColor();
 
+            Console.WriteLine("1. What is my purpose?");
+            Console.WriteLine("2. Phishing");
+            Console.WriteLine("3. Passwords");
+            Console.WriteLine("4. Safe Browsing");
+            Console.WriteLine("5. Exit");
         }
 
-        //=================
-        //UI HELPERS
-        //=================
-
+        // =========================
+        // HELPERS
+        // =========================
+        private void TypeEffect(string message)
+        {
+            foreach (char c in message)
+            {
+                Console.Write(c);
+                Thread.Sleep(15);
+            }
+            Console.WriteLine();
+        }
         private void ShowError(string message)
         {
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine(message);
             Console.ResetColor();
         }
-
-        private void TypeEffect(string message)
-        {
-            foreach (char f in message)
-            {
-                Console.Write(f);
-                Thread.Sleep(20);
-
-            }
-            Console.WriteLine();
-        }
     }
-    }
+}
 
