@@ -14,7 +14,7 @@ namespace CyberBot_part1
             Console.Title = "Cybersecurity Awareness Bot";
 
             ShowHeader();
-            PlayVoiceGreeting();
+            //PlayVoiceGreeting();
             GetUserName();
             WelcomeUser();
             MenuLoop();
@@ -47,27 +47,30 @@ namespace CyberBot_part1
         // =========================
         // VOICE GREETING (MP3/WAV)
         // =========================
-        private void PlayVoiceGreeting()
-        {
-            try
-            {
-                string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "welcome.wav");
 
-                if (File.Exists(path))
-                {
-                    Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
-                    Thread.Sleep(3000); // allow it to play briefly
-                }
-                else
-                {
-                    Console.WriteLine("(Audio file not found)");
-                }
-            }
-            catch
-            {
-                Console.WriteLine("(Could not play audio)");
-            }
-        }
+        
+
+        //private void PlayVoiceGreeting()
+        //{
+        //    try
+        //    {
+        //        string path = Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "welcome.wav");
+
+        //        if (File.Exists(path))
+        //        {
+        //            Process.Start(new ProcessStartInfo(path) { UseShellExecute = true });
+        //            Thread.Sleep(3000); // allow it to play briefly
+        //        }
+        //        else
+        //        {
+        //            Console.WriteLine("(Audio file not found)");
+        //        }
+        //    }
+        //    catch
+        //    {
+        //        Console.WriteLine("(Could not play audio)");
+        //    }
+        //}
 
         // =========================
         // GET NAME
